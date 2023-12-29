@@ -1,0 +1,34 @@
+Algorithm 1: Detection
+def DETECTION(frame, bk_sub_KNN)
+    if frame is None:
+        break
+    foreground_mask = bk_sub_KNN.apply(frame)
+    kernel = np.ones((10,10),np.uint8)
+    Apply Opening Morphology to foreground_mask remove very small movements
+    Apply Dilation Morphology to increase detection area
+    Find All Contours in foreground_mask
+    temp_bb_TL_x = max_x
+    temp_bb_TL_y = max_y
+    temp_bb_BR_x = min_x
+    temp_bb_BR_y = min_y
+    for contour in Contours:
+        x,y,w,h = boundingBox(contour)
+        if x < temp_bb_TL_x:            ------------------> Find Region of Interest
+            temp_bb_TL_x = x 
+        if y < temp_bb_TL_y:
+            temp_bb_TL_y = y
+        if x+w > temp_bb_BR_x:
+            temp_bb_BR_x = x+w 
+        if y+h > temp_bb_BR_y:
+            temp_bb_BR_y = y+h
+    ROI = frame[temp_bb_TL_y:temp_bb_BR_y, temp_bb_TL_x:temp_bb_BR_x]  ----> Crop out ROI
+
+Algorithm 2: Identification
+def IDENTIFICATION(ROI)
+    if ROI exists:
+        if size(ROI) > thresholdArea:
+            vehicle_info, points, st_code=detectAndDecode(ROI)
+        else:
+            ROI = SuperResolution("ESPCN_x4.pb", ROI)
+
+    
